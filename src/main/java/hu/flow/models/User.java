@@ -1,7 +1,6 @@
 package hu.flow.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hu.flow.models.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +23,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
@@ -39,7 +38,7 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
@@ -50,9 +49,6 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
-    private User user;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "contacts",

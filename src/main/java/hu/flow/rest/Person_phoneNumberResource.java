@@ -1,10 +1,6 @@
 package hu.flow.rest;
 
-import hu.flow.models.User;
-import hu.flow.models.dto.UserDTO;
-import hu.flow.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 

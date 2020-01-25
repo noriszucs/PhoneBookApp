@@ -1,7 +1,8 @@
 package hu.flow.rest;
 
 import hu.flow.models.User;
-import hu.flow.models.dto.UserDTO;
+import hu.flow.models.dto.UserReqDTO;
+import hu.flow.models.dto.UserResDTO;
 import hu.flow.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,39 +25,39 @@ public class UserResource {
         return userService.findAll();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/id/{id}")
     public User findOne(@PathVariable Long id) {
         return userService.findOne(id);
     }
 
-    @GetMapping("/users/{username}")
+    @GetMapping("/users/user/{username}")
     public User findOneUser(@PathVariable String username) {
-        return userService.findOneUser(username);
+        return userService.findUserByUsername(username);
+    }
+
+    @GetMapping("/login")
+    public UserResDTO getUserDTO(@RequestBody UserReqDTO userReqDTO) {
+        return userService.getUser(userReqDTO);
     }
 
     @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        log.info("User DTO: {}", userDTO);
-        userService.save(userDTO);
-        return userDTO;
+    public ResponseEntity createUser(@RequestBody User user) {
+        log.info("User: {}", user);
+        return userService.save(user);
     }
 
     @PutMapping("/users")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO update(@RequestBody UserDTO userDTO) {
-        userService.update(userDTO);
-        return userDTO;
+    public ResponseEntity update(@RequestBody User user) {
+        return userService.update(user);
     }
 
-    @DeleteMapping("/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/users/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/users/{username}")
+    @DeleteMapping("/users/user/{username}")
     public ResponseEntity<Void> deleteByName(@PathVariable String username) {
         userService.deleteByName(username);
         return ResponseEntity.ok().build();
