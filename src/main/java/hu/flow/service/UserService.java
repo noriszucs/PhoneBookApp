@@ -1,5 +1,6 @@
 package hu.flow.service;
 
+import hu.flow.exception.ValidationException;
 import hu.flow.models.User;
 import hu.flow.models.dto.UserReqDTO;
 import hu.flow.models.dto.UserResDTO;
@@ -60,7 +61,7 @@ public class UserService {
             userRepository.save(user);
             return new ResponseEntity(HttpStatus.CREATED);
         } else {
-            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ValidationException("This email address is already in use.");
         }
     }
 
@@ -75,9 +76,9 @@ public class UserService {
             existingUser.setAddress(user.getAddress());
             userRepository.save(existingUser);
         } else {
-            throw new RuntimeException("User cannot be found");
+            throw new RuntimeException("User cannot be found.");
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     public void delete(Long id) {

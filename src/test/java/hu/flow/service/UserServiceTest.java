@@ -1,6 +1,8 @@
 package hu.flow.service;
 
 import hu.flow.models.User;
+import hu.flow.models.dto.UserReqDTO;
+import hu.flow.models.dto.UserResDTO;
 import hu.flow.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -30,6 +33,18 @@ public class UserServiceTest {
     @BeforeAll
     public void init() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void getUserDto(@Mock UserRepository userRepository) {
+        UserReqDTO userReqDTO = new UserReqDTO();
+        User user = User.builder().firstName("Szucs").lastName("Nora").username("nori").password("noriASD").email("valami@valami.com").build();
+        UserResDTO userResDTO = new UserResDTO();
+        userResDTO.setEmail(user.getEmail());
+        userResDTO.setFirstName(user.getFirstName());
+        userResDTO.setLastName(user.getLastName());
+        User u = userRepository.findByUsername(userReqDTO.getUsername());
+        assertEquals(user.getEmail(), userResDTO.getEmail());
     }
 
     @Test

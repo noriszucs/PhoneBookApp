@@ -6,4 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface Person_phoneNumberRepository extends JpaRepository<Person_phoneNumber, Long> {
+    Person_phoneNumber findByNumber(int number);
+
+    Person_phoneNumber findByName(String name);
+
+    void deleteByName(String name);
 }
