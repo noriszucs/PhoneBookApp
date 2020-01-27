@@ -2,6 +2,7 @@ package hu.flow.utils;
 
 import hu.flow.models.Role;
 import hu.flow.models.User;
+import hu.flow.repository.Person_phoneNumberRepository;
 import hu.flow.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 @AllArgsConstructor
 public class InitDataLoader {
 
+    private final Person_phoneNumberRepository person_phoneNumberRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 

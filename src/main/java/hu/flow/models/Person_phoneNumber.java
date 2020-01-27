@@ -1,5 +1,6 @@
 package hu.flow.models;
 
+import hu.flow.models.dto.P_PNumDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,6 +40,20 @@ public class Person_phoneNumber {
     @Column(name = "_group")
     private Group group;
 
-    @ManyToMany(mappedBy = "phoneNumbers")
+    @ManyToMany(mappedBy = "phoneNumbers", fetch = FetchType.LAZY)
     private List<User> users;
+
+    @ManyToOne
+    @JoinColumn
+    private User user;
+
+    public void ppNumFromPpNumDTO(P_PNumDTO ppNumDTO) {
+        this.id = ppNumDTO.getId();
+        this.name = ppNumDTO.getName();
+        this.countryCode = ppNumDTO.getCountryCode();
+        this.areaCode = ppNumDTO.getAreaCode();
+        this.number = ppNumDTO.getNumber();
+        this.phoneType = ppNumDTO.getPhoneType();
+        this.group = ppNumDTO.getGroup();
+    }
 }

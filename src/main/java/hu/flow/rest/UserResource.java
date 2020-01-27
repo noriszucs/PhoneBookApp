@@ -1,12 +1,10 @@
 package hu.flow.rest;
 
 import hu.flow.models.User;
-import hu.flow.models.dto.UserReqDTO;
-import hu.flow.models.dto.UserResDTO;
+import hu.flow.models.dto.*;
 import hu.flow.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,23 +33,28 @@ public class UserResource {
         return userService.findUserByUsername(username);
     }
 
-    @GetMapping("/login")
-    public UserResDTO getUserDTO(@RequestBody UserReqDTO userReqDTO) {
+    @GetMapping("/users/login")
+    public GetUserDTO getUserDTO(@RequestBody UserReqDTO userReqDTO) {
         return userService.getUser(userReqDTO);
     }
 
-    @PostMapping("/users")
-    public ResponseEntity createUser(@RequestBody User user) {
-        log.info("User: {}", user);
-        return userService.save(user);
+    @PostMapping("/register")
+    public ResponseEntity createUser(@RequestBody UserRegisterDTO userRegisterDTO) {
+        log.info("User: {}", userRegisterDTO);
+        return userService.save(userRegisterDTO);
+    }
+/*
+    @PostMapping("/login")
+    public UserResDTO loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+        return userService.getUser(userLoginDTO);
+    }*/
+
+    @PutMapping("/userupdate")
+    public ResponseEntity update(@RequestBody UserRegisterDTO userRegisterDTO) {
+        return userService.update(userRegisterDTO);
     }
 
-    @PutMapping("/users")
-    public ResponseEntity update(@RequestBody User user) {
-        return userService.update(user);
-    }
-
-    @DeleteMapping("/users/id/{id}")
+    @DeleteMapping("/user/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();

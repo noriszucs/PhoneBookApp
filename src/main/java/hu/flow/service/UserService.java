@@ -2,11 +2,11 @@ package hu.flow.service;
 
 import hu.flow.exception.ValidationException;
 import hu.flow.models.User;
+import hu.flow.models.dto.UserRegisterDTO;
 import hu.flow.models.dto.UserReqDTO;
-import hu.flow.models.dto.UserResDTO;
+import hu.flow.models.dto.GetUserDTO;
 import hu.flow.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -37,11 +37,11 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public UserResDTO getUser(UserReqDTO userReqDTO) {
+    public GetUserDTO getUser(UserReqDTO userReqDTO) {
         if(userRepository.findByUsername(userReqDTO.getUsername()) != null) {
             User u = userRepository.findByUsername(userReqDTO.getUsername());
             if(BCrypt.checkpw(userReqDTO.getPassword(), u.getPassword())) {
-                UserResDTO uDTO = new UserResDTO();
+                GetUserDTO uDTO = new GetUserDTO();
                 uDTO.setEmail(u.getEmail());
                 uDTO.setFirstName(u.getFirstName());
                 uDTO.setLastName(u.getLastName());
@@ -54,26 +54,34 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<Void> save(User user) {   // create
-        if (user.getId() == null) {
-            String passw = passwordEncoder.encode(user.getPassword());
+    public ResponseEntity<Void> save(UserRegisterDTO userRegisterDTO) {   // create
+        User user = new User();
+        if (userRegisterDTO.getId() == null) {
+            String passw = passwordEncoder.encode(userRegisterDTO.getPassword());
+            user.setFirstName(userRegisterDTO.getFirstName());
+            user.setLastName(userRegisterDTO.getLastName());
             user.setPassword(passw);
+            user.setUsername(userRegisterDTO.getUsername());
+            user.setEmail(userRegisterDTO.getEmail());
+            user.setAddress(userRegisterDTO.getAddress());
+            user.setBirthDate(userRegisterDTO.getBirthDate());
+            user.setRole(userRegisterDTO.getRole());
             userRepository.save(user);
-            return new ResponseEntity(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             throw new ValidationException("This email address is already in use.");
         }
     }
 
-    public ResponseEntity<Void> update(User user) {
-        if(userRepository.findByUsername(user.getUsername()) != null) {
-            User existingUser = userRepository.findByUsername(user.getUsername());
-            String newPassw = passwordEncoder.encode(user.getPassword());
-            existingUser.setFirstName(user.getFirstName());
-            existingUser.setLastName(user.getLastName());
+    public ResponseEntity<Void> update(UserRegisterDTO userRegisterDTO) {
+        if(userRepository.findByUsername(userRegisterDTO.getUsername()) != null) {
+            User existingUser = userRepository.findByUsername(userRegisterDTO.getUsername());
+            String newPassw = passwordEncoder.encode(userRegisterDTO.getPassword());
+            existingUser.setFirstName(userRegisterDTO.getFirstName());
+            existingUser.setLastName(userRegisterDTO.getLastName());
             existingUser.setPassword(newPassw);
-            existingUser.setEmail(user.getEmail());
-            existingUser.setAddress(user.getAddress());
+            existingUser.setEmail(userRegisterDTO.getEmail());
+            existingUser.setAddress(userRegisterDTO.getAddress());
             userRepository.save(existingUser);
         } else {
             throw new RuntimeException("User cannot be found.");

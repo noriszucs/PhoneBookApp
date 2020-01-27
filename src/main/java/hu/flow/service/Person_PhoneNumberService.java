@@ -1,27 +1,45 @@
 package hu.flow.service;
 
 import hu.flow.models.Person_phoneNumber;
+import hu.flow.models.User;
+import hu.flow.models.dto.P_PNumDTO;
+import hu.flow.models.dto.UserRegisterDTO;
 import hu.flow.repository.Person_phoneNumberRepository;
 import hu.flow.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@AllArgsConstructor
 public class Person_PhoneNumberService {
 
-    private final Person_phoneNumberRepository person_phnRepository;
-    private final UserRepository userRepository;
+    @Autowired
+    private Person_phoneNumberRepository person_phnRepository;
+    @Autowired
+    private UserService userService;
+
+    public Person_PhoneNumberService() {
+    }
 
     public List<Person_phoneNumber> findAll() {
         return person_phnRepository.findAll();
+    }
+
+    public List<P_PNumDTO> findAllByUserId(Long userId) {
+        List<P_PNumDTO> numbers = person_phnRepository.findAllByUserId(userId);
+        return numbers;
+        //numbers.stream().filter(x -> x.getUserId() == userService.findOne(u)).forEach(System.out::println);
     }
 
     public Person_phoneNumber findOne(Long id) {
@@ -36,29 +54,29 @@ public class Person_PhoneNumberService {
         return person_phnRepository.findByName(name);
     }
 
-    public ResponseEntity create(Person_phoneNumber person_phoneNumber) {
-        if (person_phoneNumber.getNumber() != person_phoneNumber.getNumber()) {
-            person_phnRepository.save(person_phoneNumber);
-            return new ResponseEntity(HttpStatus.CREATED);
-        } else {
-            throw new RuntimeException("Already exist this phonenumber.");
-        }
+    public Person_phoneNumber create(P_PNumDTO ppNumDTO) {
+        Person_phoneNumber person_phoneNumber = new Person_phoneNumber();
+        person_phoneNumber.ppNumFromPpNumDTO(ppNumDTO);
+        person_phoneNumber.setUser(userService.findOne(ppNumDTO.getUserId()));
+//        person_phoneNumber.setUsers(ppNumDTO.getUserIDs().stream().map(userService::findOne).collect(Collectors.toList()));
+        return person_phnRepository.save(person_phoneNumber);
+        //return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    public ResponseEntity<Void> update(Person_phoneNumber person_phoneNumber) {
-        if(person_phnRepository.findByName(person_phoneNumber.getName()) != null) {
-            Person_phoneNumber existingPhnNumber = person_phnRepository.findByName(person_phoneNumber.getName());
-            existingPhnNumber.setCountryCode(person_phoneNumber.getCountryCode());
-            existingPhnNumber.setAreaCode(person_phoneNumber.getAreaCode());
-            existingPhnNumber.setNumber(person_phoneNumber.getNumber());
-            existingPhnNumber.setName(person_phoneNumber.getName());
-            existingPhnNumber.setPhoneType(person_phoneNumber.getPhoneType());
-            existingPhnNumber.setGroup(person_phoneNumber.getGroup());
-            person_phnRepository.save(existingPhnNumber);
+    public ResponseEntity<Void> update(P_PNumDTO ppNumDTO) {
+        if(person_phnRepository.findByName(ppNumDTO.getName()) != null) {
+            Person_phoneNumber existingContact = findOneContact(ppNumDTO.getName());
+            existingContact.setCountryCode(ppNumDTO.getCountryCode());
+            existingContact.setAreaCode(ppNumDTO.getAreaCode());
+            existingContact.setNumber(ppNumDTO.getNumber());
+            existingContact.setName(ppNumDTO.getName());
+            existingContact.setPhoneType(ppNumDTO.getPhoneType());
+            existingContact.setGroup(ppNumDTO.getGroup());
+            person_phnRepository.save(existingContact);
         } else {
-            throw new RuntimeException("This phonenumber cannot be found.");
+            throw new RuntimeException();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     public void deleteByName(String name) {

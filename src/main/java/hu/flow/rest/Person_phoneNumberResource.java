@@ -1,7 +1,7 @@
 package hu.flow.rest;
 
 import hu.flow.models.Person_phoneNumber;
-import hu.flow.models.User;
+import hu.flow.models.dto.P_PNumDTO;
 import hu.flow.service.Person_PhoneNumberService;
 import hu.flow.service.UserService;
 import lombok.AllArgsConstructor;
@@ -24,6 +24,11 @@ public class Person_phoneNumberResource {
         return person_phoneNumberService.findAll();
     }
 
+    @GetMapping("/contact/mycontacts/{userId}")
+    public List<P_PNumDTO> findMyContact(@PathVariable  Long userId) {
+        return person_phoneNumberService.findAllByUserId(userId);
+    }
+
     @GetMapping("/contact/id/{id}")
     public Person_phoneNumber findOne(@PathVariable Long id) {
         return person_phoneNumberService.findOne(id);
@@ -39,19 +44,23 @@ public class Person_phoneNumberResource {
         return person_phoneNumberService.findOneContact(name);
     }
 
-    @PostMapping("/me")
-    public ResponseEntity createUser(@RequestBody User user) {
-        return userService.save(user);
+    @PostMapping("/contact")
+    public ResponseEntity<P_PNumDTO> createContact(@RequestBody P_PNumDTO ppNumDTO) {
+        Person_phoneNumber person_phoneNumber = person_phoneNumberService.create(ppNumDTO);
+        ppNumDTO.person_PhnNumDTOFromPerson_PhoneNumber(person_phoneNumber);
+        return ResponseEntity.ok(ppNumDTO);
     }
 
-    @PostMapping("/contact")
-    public ResponseEntity createContact(@RequestBody Person_phoneNumber person_phoneNumber) {
-        return person_phoneNumberService.create(person_phoneNumber);
-    }
+/*    @PostMapping
+    public ResponseEntity<TaskDTO> saveTask(@RequestBody TaskDTO taskDTO) {
+        Task task = taskService.saveTask(taskDTO);
+        taskDTO.taskDTOFromTask(task);
+        return ResponseEntity.ok(taskDTO);
+    }*/
 
     @PutMapping("/contact")
-    public ResponseEntity update(@RequestBody Person_phoneNumber person_phoneNumber) {
-        return person_phoneNumberService.update(person_phoneNumber);
+    public ResponseEntity update(@RequestBody P_PNumDTO ppNumDTO) {
+        return person_phoneNumberService.update(ppNumDTO);
     }
 
     @DeleteMapping("/contact/name/{name}")
