@@ -1,5 +1,6 @@
 package hu.flow.models.dto;
 
+import hu.flow.models.Person_phoneNumber;
 import hu.flow.models.Role;
 import hu.flow.models.User;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,9 @@ public class UserResDTO {
     private LocalDate birthDate;
     private Role role;
     private List<Long> phoneNumberIds;
-    private Iterator<String> contactName;
 
-    public void userDTOFromUser(User user) {
+
+    public UserResDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
@@ -41,11 +42,7 @@ public class UserResDTO {
         if (user.getPhoneNumbers() == null) {
             this.phoneNumberIds = null;
         } else {
-            this.phoneNumberIds = user.getPhoneNumbers().stream().map(x -> x.getId()).collect(Collectors.toList());
-            /*contactName.hasNext();
-            String names = contactName.next();
-            System.out.println(names);*/
-            //this.contactName.forEachRemaining(System.out::println);
+            this.phoneNumberIds = user.getPhoneNumbers().stream().map(Person_phoneNumber::getId).collect(Collectors.toList());
         }
     }
 }

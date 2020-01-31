@@ -43,11 +43,6 @@ public class UserResource {
         log.info("User: {}", userRegisterDTO);
         return userService.save(userRegisterDTO);
     }
-/*
-    @PostMapping("/login")
-    public UserResDTO loginUser(@RequestBody UserLoginDTO userLoginDTO) {
-        return userService.getUser(userLoginDTO);
-    }*/
 
     @PutMapping("/userupdate")
     public ResponseEntity update(@RequestBody UserRegisterDTO userRegisterDTO) {

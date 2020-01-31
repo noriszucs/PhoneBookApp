@@ -3,14 +3,10 @@ package hu.flow.models.dto;
 import hu.flow.models.Group;
 import hu.flow.models.Person_phoneNumber;
 import hu.flow.models.PhoneType;
-import hu.flow.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -26,7 +22,6 @@ public class P_PNumDTO {
     private int number;
     private PhoneType phoneType;
     private Group group;
-    private List<Long> userIDs;
 
     public void person_PhnNumDTOFromPerson_PhoneNumber(Person_phoneNumber person_phoneNumber) {
         this.id = person_phoneNumber.getId();
@@ -39,6 +34,5 @@ public class P_PNumDTO {
         if (person_phoneNumber.getUser() != null) {
             this.userId = person_phoneNumber.getUser().getId();
         } else this.userId = null;
-        //this.userIDs = person_phoneNumber.getUsers().stream().map(User::getId).collect(Collectors.toList());
     }
 }

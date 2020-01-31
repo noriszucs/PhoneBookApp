@@ -5,10 +5,13 @@ import hu.flow.models.User;
 import hu.flow.models.dto.UserRegisterDTO;
 import hu.flow.models.dto.UserReqDTO;
 import hu.flow.models.dto.GetUserDTO;
+import hu.flow.models.dto.UserResDTO;
 import hu.flow.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -97,4 +101,8 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
+    public UserResDTO findMyContacts() {
+        String currentUsername = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).map(Authentication::getName).orElse("");
+        return new UserResDTO(userRepository.findByUsername(currentUsername));
+    }
 }

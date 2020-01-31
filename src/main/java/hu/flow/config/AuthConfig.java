@@ -32,15 +32,15 @@ public class AuthConfig extends AuthorizationServerConfigurerAdapter {
 
   @Override
   public void configure(final ClientDetailsServiceConfigurer clients)
-      throws Exception {// @formatter:off
-        clients.inMemory()
-          .withClient("phbookClientIdPassword")
-          .secret(passwordEncoder().encode("secret"))
-          .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
-          .scopes("foo", "read", "write")
-          .accessTokenValiditySeconds(3600) // 1 hour
-          .refreshTokenValiditySeconds(2592000); // 30 days
-	} // @formatter:on
+          throws Exception {// @formatter:off
+    clients.inMemory()
+            .withClient("phbookClientIdPassword")
+            .secret(passwordEncoder().encode("secret"))
+            .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
+            .scopes("foo", "read", "write")
+            .accessTokenValiditySeconds(3600) // 1 hour
+            .refreshTokenValiditySeconds(2592000); // 30 days
+  } // @formatter:on
 
   @Bean
   @Primary
@@ -54,8 +54,8 @@ public class AuthConfig extends AuthorizationServerConfigurerAdapter {
   @Override
   public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
     endpoints.tokenStore(tokenStore())
-        .accessTokenConverter(accessTokenConverter())
-        .authenticationManager(authenticationManager);
+            .accessTokenConverter(accessTokenConverter())
+            .authenticationManager(authenticationManager);
   }
 
   @Bean

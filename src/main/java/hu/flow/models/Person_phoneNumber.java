@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "phoneNumbers")
@@ -39,9 +38,6 @@ public class Person_phoneNumber {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "_group")
     private Group group;
-
-    @ManyToMany(mappedBy = "phoneNumbers", fetch = FetchType.LAZY)
-    private List<User> users;
 
     @ManyToOne
     @JoinColumn

@@ -1,24 +1,17 @@
 package hu.flow.service;
 
 import hu.flow.models.Person_phoneNumber;
-import hu.flow.models.User;
 import hu.flow.models.dto.P_PNumDTO;
-import hu.flow.models.dto.UserRegisterDTO;
 import hu.flow.repository.Person_phoneNumberRepository;
-import hu.flow.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -34,12 +27,6 @@ public class Person_PhoneNumberService {
 
     public List<Person_phoneNumber> findAll() {
         return person_phnRepository.findAll();
-    }
-
-    public List<P_PNumDTO> findAllByUserId(Long userId) {
-        List<P_PNumDTO> numbers = person_phnRepository.findAllByUserId(userId);
-        return numbers;
-        //numbers.stream().filter(x -> x.getUserId() == userService.findOne(u)).forEach(System.out::println);
     }
 
     public Person_phoneNumber findOne(Long id) {
@@ -58,9 +45,7 @@ public class Person_PhoneNumberService {
         Person_phoneNumber person_phoneNumber = new Person_phoneNumber();
         person_phoneNumber.ppNumFromPpNumDTO(ppNumDTO);
         person_phoneNumber.setUser(userService.findOne(ppNumDTO.getUserId()));
-//        person_phoneNumber.setUsers(ppNumDTO.getUserIDs().stream().map(userService::findOne).collect(Collectors.toList()));
         return person_phnRepository.save(person_phoneNumber);
-        //return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     public ResponseEntity<Void> update(P_PNumDTO ppNumDTO) {
