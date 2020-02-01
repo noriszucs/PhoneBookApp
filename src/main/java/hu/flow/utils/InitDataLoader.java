@@ -22,8 +22,8 @@ public class InitDataLoader {
 
     @PostConstruct
     public void init() {
-        userRepository.save(User.builder().username("nori").password(passwordEncoder.encode("123")).role(Role.ADMIN).build());
-        userRepository.save(User.builder().username("zoli").password(passwordEncoder.encode("123")).role(Role.USER).build());
+        userRepository.save(User.builder().username("nori").password(passwordEncoder.encode("123")).email("noriadmin@gmail.com").role(Role.ADMIN).build());
+        userRepository.save(User.builder().username("vivi").password(passwordEncoder.encode("123")).email("vivitester@gmail.com").role(Role.USER).build());
 
     }
 }
