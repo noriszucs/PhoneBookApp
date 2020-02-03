@@ -1,6 +1,6 @@
 package hu.flow.models;
 
-import hu.flow.models.dto.P_PNumDTO;
+import hu.flow.models.dto.PPNumDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person_phoneNumber {
+public class PersonPhoneNumber {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class Person_phoneNumber {
     @Column
     private int areaCode;
 
-    @Column
+    @Column(unique = true)
     private int number;
 
     @Enumerated(value = EnumType.STRING)
@@ -43,7 +43,7 @@ public class Person_phoneNumber {
     @JoinColumn
     private User user;
 
-    public void ppNumFromPpNumDTO(P_PNumDTO ppNumDTO) {
+    public void ppNumFromPpNumDTO(PPNumDTO ppNumDTO) {
         this.id = ppNumDTO.getId();
         this.name = ppNumDTO.getName();
         this.countryCode = ppNumDTO.getCountryCode();

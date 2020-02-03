@@ -86,6 +86,7 @@ public class UserService {
             existingUser.setPassword(newPassw);
             existingUser.setEmail(userRegisterDTO.getEmail());
             existingUser.setAddress(userRegisterDTO.getAddress());
+            existingUser.setBirthDate(userRegisterDTO.getBirthDate());
             userRepository.save(existingUser);
         } else {
             throw new RuntimeException("User cannot be found.");
@@ -101,8 +102,13 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
-    public UserResDTO findMyContacts() {
+    public List<String> findMyContacts() {
+        String currentUsername = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).map(Authentication::getName).orElse("");
+        return new UserResDTO(userRepository.findByUsername(currentUsername)).getPhoneNumbers();
+    }
+
+    /*public UserResDTO findMyContacts() {
         String currentUsername = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).map(Authentication::getName).orElse("");
         return new UserResDTO(userRepository.findByUsername(currentUsername));
-    }
+    }*/
 }

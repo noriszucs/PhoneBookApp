@@ -1,7 +1,7 @@
 package hu.flow.models.dto;
 
 import hu.flow.models.Group;
-import hu.flow.models.Person_phoneNumber;
+import hu.flow.models.PersonPhoneNumber;
 import hu.flow.models.PhoneType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class P_PNumDTO {
+public class PPNumDTO {
 
     private Long id;
     private Long userId;
@@ -23,7 +23,7 @@ public class P_PNumDTO {
     private PhoneType phoneType;
     private Group group;
 
-    public void person_PhnNumDTOFromPerson_PhoneNumber(Person_phoneNumber person_phoneNumber) {
+    public void person_PhnNumDTOFromPerson_PhoneNumber(PersonPhoneNumber person_phoneNumber) {
         this.id = person_phoneNumber.getId();
         this.name = person_phoneNumber.getName();
         this.countryCode = person_phoneNumber.getCountryCode();

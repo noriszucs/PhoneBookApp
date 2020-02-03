@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -38,12 +39,15 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(unique = true)
+    @NotNull
     private String username;
 
     @Column
+    @NotNull
     private String password;
 
     @Column(unique = true)
+    @NotNull
     private String email;
 
     @Column
@@ -59,7 +63,7 @@ public class User implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonBackReference
-    private List<Person_phoneNumber> phoneNumbers;
+    private List<PersonPhoneNumber> phoneNumbers;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
