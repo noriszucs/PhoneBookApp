@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements R
         // @formatter:off
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/oauth/**", "/oauth/token/revokeById/**", "/tokens/**").permitAll()
-                .antMatchers("/register").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/login").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                 .antMatchers("/api/userupdate").hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                 .antMatchers("/api/user/id/{id}").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())

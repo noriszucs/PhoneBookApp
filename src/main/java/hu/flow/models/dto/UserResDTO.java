@@ -22,7 +22,6 @@ public class UserResDTO {
     private String lastName;
     private String username;
     private String email;
-    private String address;
     private LocalDate birthDate;
     private Role role;
     //private List<Long> phoneNumberIds;
@@ -35,7 +34,6 @@ public class UserResDTO {
         this.lastName = user.getLastName();
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.address = user.getAddress();
         this.birthDate = user.getBirthDate();
         this.role = user.getRole();
         if (user.getPhoneNumbers() == null) {

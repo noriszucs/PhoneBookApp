@@ -43,12 +43,7 @@ public class UserServiceTest {
         assertEquals(user.getEmail(), getUserDTO.getEmail());
     }
 
-    @Test
-    public void save(@Mock UserRepository userRepository) {
-        UserRegisterDTO userRegisterDTO = UserRegisterDTO.builder().username("nori").password("noriASD").build();
-        new UserService(userRepository, passwordEncoder).save(userRegisterDTO);
-        assertNotEquals("noriDSA", userRegisterDTO.getPassword());
-    }
+
 
     @Test
     public void update(@Mock UserRepository userRepository) {

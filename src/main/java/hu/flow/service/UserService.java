@@ -1,6 +1,7 @@
 package hu.flow.service;
 
 import hu.flow.exception.ValidationException;
+import hu.flow.models.Role;
 import hu.flow.models.User;
 import hu.flow.models.dto.UserRegisterDTO;
 import hu.flow.models.dto.UserReqDTO;
@@ -58,22 +59,21 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<Void> save(UserRegisterDTO userRegisterDTO) {   // create
-        User user = new User();
-        if (userRegisterDTO.getId() == null) {
-            String passw = passwordEncoder.encode(userRegisterDTO.getPassword());
-            user.setFirstName(userRegisterDTO.getFirstName());
-            user.setLastName(userRegisterDTO.getLastName());
+    public UserRegisterDTO save(User user) {   // create
+        if (user.getId() == null) {
+            String passw = passwordEncoder.encode(user.getPassword());
+            user.setFirstName(user.getFirstName());
+            user.setLastName(user.getLastName());
             user.setPassword(passw);
-            user.setUsername(userRegisterDTO.getUsername());
-            user.setEmail(userRegisterDTO.getEmail());
-            user.setAddress(userRegisterDTO.getAddress());
-            user.setBirthDate(userRegisterDTO.getBirthDate());
-            user.setRole(userRegisterDTO.getRole());
+            user.setUsername(user.getUsername());
+            user.setEmail(user.getEmail());
+            user.setBirthDate(user.getBirthDate());
+            user.setRole(Role.USER);
             userRepository.save(user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            var savedUser = userRepository.save(user);
+            return UserRegisterDTO.fromUser(savedUser);
         } else {
-            throw new ValidationException("This email address is already in use.");
+            throw new RuntimeException("user exist");
         }
     }
 
@@ -85,7 +85,6 @@ public class UserService {
             existingUser.setLastName(userRegisterDTO.getLastName());
             existingUser.setPassword(newPassw);
             existingUser.setEmail(userRegisterDTO.getEmail());
-            existingUser.setAddress(userRegisterDTO.getAddress());
             existingUser.setBirthDate(userRegisterDTO.getBirthDate());
             userRepository.save(existingUser);
         } else {

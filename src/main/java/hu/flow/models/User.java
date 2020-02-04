@@ -51,9 +51,6 @@ public class User implements UserDetails {
     private String email;
 
     @Column
-    private String address;
-
-    @Column
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthDate;

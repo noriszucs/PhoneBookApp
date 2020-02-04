@@ -5,6 +5,7 @@ import hu.flow.models.dto.*;
 import hu.flow.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,9 +40,11 @@ public class UserResource {
     }
 
     @PostMapping("/register")
-    public ResponseEntity createUser(@RequestBody UserRegisterDTO userRegisterDTO) {
-        log.info("User: {}", userRegisterDTO);
-        return userService.save(userRegisterDTO);
+    public ResponseEntity<UserRegisterDTO> createUser(@RequestBody User user) {
+        return new ResponseEntity<>(
+                userService.save(user),
+                HttpStatus.CREATED
+        );
     }
 
     @PutMapping("/userupdate")
