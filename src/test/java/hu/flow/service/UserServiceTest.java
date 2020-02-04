@@ -43,14 +43,4 @@ public class UserServiceTest {
         assertEquals(user.getEmail(), getUserDTO.getEmail());
     }
 
-
-
-    @Test
-    public void update(@Mock UserRepository userRepository) {
-        User olduser = User.builder().firstName("Szucs").lastName("Nora").username("nori").password("noriASD").email("valami@valami.com").build();
-        UserRegisterDTO updateduser = UserRegisterDTO.builder().firstName("Szucs").lastName("Nora").username("nori").password("cica").email("valami@valami.com").build();
-        Mockito.when(userRepository.findByUsername("nori")).thenReturn(olduser);
-        new UserService(userRepository, passwordEncoder).update(updateduser);
-        assertEquals("cica", updateduser.getPassword());
-    }
 }

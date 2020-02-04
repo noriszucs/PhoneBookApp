@@ -48,8 +48,11 @@ public class UserResource {
     }
 
     @PutMapping("/userupdate")
-    public ResponseEntity update(@RequestBody UserRegisterDTO userRegisterDTO) {
-        return userService.update(userRegisterDTO);
+    public ResponseEntity<UserRegisterDTO> update(@RequestBody User existingUser) {
+        return new ResponseEntity<>(
+                userService.save(existingUser),
+                HttpStatus.ACCEPTED
+        );
     }
 
     @DeleteMapping("/user/id/{id}")
