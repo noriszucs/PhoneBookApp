@@ -25,13 +25,13 @@ public class PersonPhoneNumberResource {
         return person_phoneNumberService.findAll();
     }
 
-    /*@GetMapping("/contact/mycontacts")
+    /*@GetMapping("/mycontacts")
     public UserResDTO findMyContact() {
         return userService.findMyContacts();
     }*/
 
-    @GetMapping("/contact/mycontacts")
-    public List<String> findMyContact() {
+    @GetMapping("/mycontacts")
+    public List<PersonPhoneNumber> findMyContact() {
         return userService.findMyContacts();
     }
 

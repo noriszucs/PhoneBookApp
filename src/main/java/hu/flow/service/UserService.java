@@ -1,6 +1,7 @@
 package hu.flow.service;
 
 import hu.flow.exception.ValidationException;
+import hu.flow.models.PersonPhoneNumber;
 import hu.flow.models.Role;
 import hu.flow.models.User;
 import hu.flow.models.dto.UserRegisterDTO;
@@ -90,9 +91,9 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
-    public List<String> findMyContacts() {
+    public List<PersonPhoneNumber> findMyContacts() {
         String currentUsername = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).map(Authentication::getName).orElse("");
-        return new UserResDTO(userRepository.findByUsername(currentUsername)).getPhoneNumbers();
+        return userRepository.findByUsername(currentUsername).getPhoneNumbers();
     }
 
     /*public UserResDTO findMyContacts() {
