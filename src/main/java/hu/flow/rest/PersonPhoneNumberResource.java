@@ -25,10 +25,10 @@ public class PersonPhoneNumberResource {
         return person_phoneNumberService.findAll();
     }
 
-    /*@GetMapping("/mycontacts")
-    public UserResDTO findMyContact() {
-        return userService.findMyContacts();
-    }*/
+    @GetMapping("/mycontacts/me")
+    public UserResDTO findMe() {
+        return userService.findMe();
+    }
 
     @GetMapping("/mycontacts")
     public List<PersonPhoneNumber> findMyContact() {

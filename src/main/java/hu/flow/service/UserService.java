@@ -60,7 +60,7 @@ public class UserService {
         }
     }
 
-    public UserRegisterDTO save(User user) {
+    public UserRegisterDTO save(User user) {   // create
         if (user.getId() == null) {
             String passw = passwordEncoder.encode(user.getPassword());
             user.setFirstName(user.getFirstName());
@@ -70,17 +70,28 @@ public class UserService {
             user.setEmail(user.getEmail());
             user.setBirthDate(user.getBirthDate());
             user.setRole(Role.USER);
+            userRepository.save(user);
+            var savedUser = userRepository.save(user);
+            return UserRegisterDTO.fromUser(savedUser);
         } else {
-            User existingUser = findOne(user.getId());
-            existingUser.setFirstName(user.getFirstName());
-            existingUser.setLastName(user.getLastName());
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setBirthDate(user.getBirthDate());
+            throw new RuntimeException("user exist");
         }
-        var savedUser = userRepository.save(user);
-        return UserRegisterDTO.fromUser(savedUser);
+    }
+
+    public ResponseEntity<Void> update(UserRegisterDTO userRegisterDTO) {
+        if(userRepository.findByUsername(userRegisterDTO.getUsername()) != null) {
+            User existingUser = userRepository.findByUsername(userRegisterDTO.getUsername());
+            String newPassw = passwordEncoder.encode(userRegisterDTO.getPassword());
+            existingUser.setFirstName(userRegisterDTO.getFirstName());
+            existingUser.setLastName(userRegisterDTO.getLastName());
+            existingUser.setPassword(newPassw);
+            existingUser.setEmail(userRegisterDTO.getEmail());
+            existingUser.setBirthDate(userRegisterDTO.getBirthDate());
+            userRepository.save(existingUser);
+        } else {
+            throw new RuntimeException("User cannot be found.");
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     public void delete(Long id) {
@@ -96,8 +107,8 @@ public class UserService {
         return userRepository.findByUsername(currentUsername).getPhoneNumbers();
     }
 
-    /*public UserResDTO findMyContacts() {
+    public UserResDTO findMe() {
         String currentUsername = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).map(Authentication::getName).orElse("");
         return new UserResDTO(userRepository.findByUsername(currentUsername));
-    }*/
+    }
 }
