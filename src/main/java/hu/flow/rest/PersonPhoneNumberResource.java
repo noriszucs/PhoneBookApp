@@ -25,7 +25,7 @@ public class PersonPhoneNumberResource {
         return person_phoneNumberService.findAll();
     }
 
-    @GetMapping("/mycontacts/me")
+    @GetMapping("/me")
     public UserResDTO findMe() {
         return userService.findMe();
     }
@@ -50,9 +50,10 @@ public class PersonPhoneNumberResource {
         return person_phoneNumberService.findOneContact(name);
     }
 
-    @PostMapping("/contact")
-    public ResponseEntity<PPNumDTO> createContact(@RequestBody PPNumDTO ppNumDTO) {
-        PersonPhoneNumber person_phoneNumber = person_phoneNumberService.create(ppNumDTO);
+    @PostMapping("/users/id/{id}/contact")
+    public ResponseEntity<PPNumDTO> createContact(@PathVariable Long id, @RequestBody PPNumDTO ppNumDTO) {
+        System.out.println(ppNumDTO);
+        PersonPhoneNumber person_phoneNumber = person_phoneNumberService.create(id, ppNumDTO);
         ppNumDTO.person_PhnNumDTOFromPerson_PhoneNumber(person_phoneNumber);
         return ResponseEntity.ok(ppNumDTO);
     }

@@ -3,6 +3,7 @@ package hu.flow.service;
 import hu.flow.models.PersonPhoneNumber;
 import hu.flow.models.dto.PPNumDTO;
 import hu.flow.repository.PersonPhoneNumberRepository;
+import hu.flow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class PersonPhoneNumberService {
     private PersonPhoneNumberRepository person_phnRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    UserRepository userRepository;
 
     public PersonPhoneNumberService() {
     }
@@ -41,10 +44,10 @@ public class PersonPhoneNumberService {
         return person_phnRepository.findByName(name);
     }
 
-    public PersonPhoneNumber create(PPNumDTO ppNumDTO) {
+    public PersonPhoneNumber create( Long id ,PPNumDTO ppNumDTO) {
         PersonPhoneNumber person_phoneNumber = new PersonPhoneNumber();
         person_phoneNumber.ppNumFromPpNumDTO(ppNumDTO);
-        person_phoneNumber.setUser(userService.findOne(ppNumDTO.getUserId()));
+        person_phoneNumber.setUser(userRepository.findById(id).get());
         return person_phnRepository.save(person_phoneNumber);
     }
 
