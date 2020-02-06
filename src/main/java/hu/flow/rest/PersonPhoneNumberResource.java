@@ -68,4 +68,10 @@ public class PersonPhoneNumberResource {
         person_phoneNumberService.deleteByName(name);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/contact/id/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        person_phoneNumberService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

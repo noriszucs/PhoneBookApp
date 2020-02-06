@@ -70,4 +70,8 @@ public class PersonPhoneNumberService {
     public void deleteByName(String name) {
         person_phnRepository.deleteByName(name);
     }
+
+    public void deleteById(Long id) {
+        person_phnRepository.deleteById(id);
+    }
 }
